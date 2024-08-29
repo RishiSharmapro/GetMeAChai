@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "Get me A Chai - Fund your projects with chai",
   description: "This website is a crowdfunding platform for devlopers to fund their projects with chai.",
-  icon: "/web/favicon-xl.png"
+  icon: "/favicon-xl.png"
 };
 
 export default function RootLayout({ children }) {

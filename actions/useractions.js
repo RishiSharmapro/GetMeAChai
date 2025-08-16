@@ -24,7 +24,6 @@ export const createOrder = async (amount, to_user, paymentform) => {
     };
     
     let order = await instance.orders.create(options);
-    console.log(`Order created: ${JSON.stringify(instance)}`);
 
     //create a payment instance which shows pending payment in the database
     await Payment.create({
@@ -74,7 +73,6 @@ export const fetchCampaigns = async (username) => {
     campaigns.forEach(campaign => {
         campaign._id = (campaign._id).toString();
     });
-    console.log(`Fetched campaigns for ${username}:`, campaigns);
     return Array.isArray(campaigns) ? campaigns : [campaigns];
 }
 
@@ -82,8 +80,6 @@ export const updateProfile = async (data) => {
     await connectDB();
 
     try {
-        console.log("Updating user profile:", data);
-
         const userId = data._id;
         if (!userId) {
             return { message: "User ID is required" };
@@ -129,11 +125,9 @@ export const updateProfile = async (data) => {
 export const getUser = async (username) => {
     await connectDB();
     const user = await User.findOne({ username: username });
-    // console.log(`User found: ${user}`);
     if (!user) {
         return null;
     }
-    console.log(`User found: ${user}`);
 
     return JSON.stringify(user);
 }
@@ -149,25 +143,20 @@ export const getAllUsers = async () => {
 }
 
 export const handleGithubSignIn = async () => {
-    console.log("Handling sign in");
     await signIn('github', {
         redirectTo: '/dashboard'
     });
 }
 
 export const handleGoogleSignIn = async () => {
-    console.log("Handling Google sign in");
     await signIn('google', {
         redirectTo: '/dashboard'
-    }
-    );
+    });
 }
 
 export const handleCredentialSignIn = async (formData) => {
-    console.log("Handling credentials sign in");
     const email = formData.get("email");
     const password = formData.get("password");
-    console.log('Form Data: ', { email, password });
     await signIn('credentials', {
         name: formData.name || '',
         email: email,
@@ -177,9 +166,7 @@ export const handleCredentialSignIn = async (formData) => {
 }
 
 export const handleSignOut = async () => {
-    console.log("Handling sign out");
     await signOut({ redirect: false });
-    console.log("Session terminated successfully.");
 }
 
 export const getSession = async () => {
@@ -187,6 +174,5 @@ export const getSession = async () => {
     if (!session) {
         return null;
     }
-    console.log(`Session data: ${JSON.stringify(session)}`);
     return session;
 }

@@ -100,7 +100,6 @@ const AuthPage = () => {
         const formData = new FormData(e.currentTarget);
         const email = formData.get("email");
         const password = formData.get("password");
-        console.log({ email, password });
 
         const res = await signIn("credentials", {
             redirect: false, // prevent auto redirect
@@ -116,14 +115,12 @@ const AuthPage = () => {
     };
 
     const handleGoogleSignIn = async () => {
-        console.log("Handling Google sign in");
         await signIn("google", {
             redirectTo: "/dashboard",
         });
     };
 
     const handleGithubSignIn = async () => {
-        console.log("Handling sign in");
         await signIn("github", {
             redirectTo: "/dashboard",
         });

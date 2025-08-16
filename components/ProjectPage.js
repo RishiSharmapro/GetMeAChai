@@ -107,13 +107,14 @@ const ProjectsPage = () => {
         </div>
 
         <div className="mb-8 p-4 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col md:flex-row gap-4 items-center">
-          <div className="relative flex-grow w-full border">
+          <div className="relative flex-grow w-full">
             <Search
               className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
               size={20}
             />
             <input
               type="text"
+              name="search"
               placeholder="Search by campaign title or creator..."
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500"
               value={searchTerm}

@@ -23,14 +23,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
       },
       authorize: async (credentials) => {
-        console.log('Authorizing user with credentials: ', credentials);
 
         try {
           let user = null
  
-          console.log('Parsing credentials ');
           const { email, password } = await signInSchema.parseAsync(credentials)
-          console.log('Parsed credentials: ', { email, password });
           // logic to salt and hash password
           // const pwHash = saltAndHashPassword(password)
  
@@ -62,7 +59,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       const existingUser = await User.findOne({ email: user.email });
 
-      console.log(`Creating new user: ${user}`);
       if (!existingUser) {
         const username = user.email.split("@")[0];
 

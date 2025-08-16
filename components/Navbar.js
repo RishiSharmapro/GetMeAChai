@@ -15,10 +15,7 @@ const Navbar = () => {
   const [showDropdown, setShowDropdown] = React.useState(false);
 
   React.useEffect(() => {
-    console.log("Params:", path);
-    
     setShowDropdown(false);
-    console.log("Session Data:", session);
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };

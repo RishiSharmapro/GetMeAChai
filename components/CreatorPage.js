@@ -42,13 +42,11 @@ const CreatorPage = ({ username }) => {
         const fetchUserData = async () => {
             const userData = await getUserSupporters(username);
             const campaignsData = await fetchCampaigns(username);
-            console.log("Fetched campaigns:", campaignsData);
             setCampaigns(campaignsData);
             setSupporters(userData);
             let user = await getUser(username);
             if (user) {
                 user = JSON.parse(user);
-                console.log(`Fetched user data for ${username}:`, user, creator);
                 setCreator({
                     name: user.name,
                     avatar: user.avatar.includes('http') ? user.avatar : `/${user.avatar}`,
@@ -60,7 +58,6 @@ const CreatorPage = ({ username }) => {
                 });
             }
             else {
-                console.log(`User not found: ${username}`);
                 router.push('/creators');
             }
 

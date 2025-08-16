@@ -49,7 +49,6 @@ const DashboardPage = () => {
         coverpicture: "https://picsum.photos/1000/390",
       });
     }
-    console.log(`Session data: ${JSON.stringify(session)}`);
   }, [status]);
 
   const handleSubmit = async (e) => {
@@ -58,7 +57,6 @@ const DashboardPage = () => {
     data._id = session.user.id; // MongoDB user ID
     const result = await updateProfile(data);
     setData(result);
-    console.log(result);
   };
 
   const renderContent = () => {
@@ -172,8 +170,6 @@ const DashboardPage = () => {
                 <button
                   onClick={async () => {
                     await signOut({ redirect: false });
-                    console.log("User signed out");
-
                     router.push('/');
                   }}
                   className="cursor-pointer w-full flex items-center px-4 py-2 rounded-lg text-left text-red-500 hover:bg-red-50"

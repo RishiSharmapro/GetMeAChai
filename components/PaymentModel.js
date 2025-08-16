@@ -16,9 +16,7 @@ const PaymentModal = ({ isOpen, onClose, creatorUsername }) => {
 
     // Placeholder for Razorpay integration
     const handlePayment = async () => {
-        console.log(`Initiating payment of ₹${amount} to ${creatorUsername}`);
         pay(amount);
-        // alert(`This would open Razorpay to process a payment of ₹${amount} to ${creatorUsername}.`);
         onClose();
     };
 
@@ -37,12 +35,10 @@ const PaymentModal = ({ isOpen, onClose, creatorUsername }) => {
             });
             return;
         }
-        //get a order id from the backend
-        console.log(`Creating order for amount: $${amount}, creator: ${creatorUsername}`);
 
+        //get a order id from the backend
         const id = await createOrder(amount, creatorUsername, paymentform);
         const orderId = id.id;
-        // console.log(`Order ID received: ${orderId}`);
 
         var options = {
             "key": process.env.NEXT_PUBLIC_RAZORPAY_ID, // Enter the Key ID generated from the Dashboard
@@ -66,9 +62,7 @@ const PaymentModal = ({ isOpen, onClose, creatorUsername }) => {
             }
         };
 
-        // console.log(`Razorpay options: ${JSON.stringify(options)}`);
         var rzp1 = new window.Razorpay(options);
-        console.log(`Razorpay instance created: ${JSON.stringify(rzp1)}`);
         rzp1.open();
     }
 
@@ -78,9 +72,6 @@ const PaymentModal = ({ isOpen, onClose, creatorUsername }) => {
         <>
             <Script
                 src="https://checkout.razorpay.com/v1/checkout.js"
-                onLoad={() => {
-                    console.log('Script has loaded')
-                }}
             />
             <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
                 <div className="bg-white rounded-xl shadow-2xl w-full max-w-md transform transition-all" onClick={(e) => e.stopPropagation()}>

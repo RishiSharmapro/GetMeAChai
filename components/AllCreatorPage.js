@@ -98,7 +98,6 @@ const AllCreatorsPage = () => {
     const fetchCreators = async () => {
       const creators = await getAllUsers();
       setFilteredCreators(creators);
-      console.log("Fetched creators:", creators);
     };
 
     fetchCreators();
@@ -127,7 +126,7 @@ const AllCreatorsPage = () => {
         </div>
 
         <div className="mb-8 p-4 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col md:flex-row gap-4 items-center">
-          <div className="relative flex-grow">
+          <div className="relative flex-grow w-full">
             <Search
               className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
               size={20}
@@ -142,7 +141,7 @@ const AllCreatorsPage = () => {
           </div>
           <div className="flex items-center gap-4 w-full md:w-auto">
             <div className="relative w-full md:w-auto">
-              <select className="w-full appearance-none bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-amber-500">
+              <select className="w-full min-w-40 appearance-none bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-amber-500">
                 <option>All Categories</option>
                 <option>Art</option>
                 <option>Tech</option>

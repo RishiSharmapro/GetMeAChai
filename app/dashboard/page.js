@@ -1,5 +1,5 @@
 import React from 'react'
-import Dashboard from '@/components/Dashboard'
+import DashboardPage from '@/components/Dashboard';
 
 export const metadata = {
     title: "Dashboard - Get me A Chai",
@@ -10,7 +10,7 @@ export const metadata = {
 const dashboardPage = () => {
   return (
     <div>
-        <Dashboard />
+        <DashboardPage />
     </div>
   )
 }

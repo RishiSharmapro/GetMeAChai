@@ -4,8 +4,8 @@ import React from 'react'
 import Script from 'next/script'
 import { createOrder, fetchUser, getUserSupporters } from '@/actions/useractions'
 import { useSession } from 'next-auth/react'
-import 'react-toastify/dist/ReactToastify.css';
-import { Bounce, Flip, ToastContainer, toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
+// import { Flip, ToastContainer, toast } from 'react-toastify';
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 

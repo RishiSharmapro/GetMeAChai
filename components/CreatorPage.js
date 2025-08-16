@@ -107,10 +107,12 @@ const CreatorPage = ({ username }) => {
                                 <p className="text-gray-500 mt-2">This creator has not launched any campaigns yet.</p>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-2 sm:grid-cols-1 xl:grid-cols-3 gap-8">
+                            <div className="grid xl:grid-cols-2 gap-8">
+                                <div>
                                 {campaigns.map(campaign => (
                                     <CampaignCard key={campaign.id} campaign={campaign} />
                                 ))}
+                                </div>
                             </div>
                         )}
                     </main>

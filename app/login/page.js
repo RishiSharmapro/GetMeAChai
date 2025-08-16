@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Mail, Lock, User } from "lucide-react";
 import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 // import { useSession, signIn, signOut } from "next-auth/react"
 // import { useRouter } from 'next/navigation'
@@ -70,18 +70,14 @@ import { useSession } from "next-auth/react";
 const AuthPage = () => {
     const { data: currSession, status } = useSession();
     const router = useRouter();
-    const searchParams = useSearchParams();
+    // const searchParams = useSearchParams();
     const [authMode, setAuthMode] = useState("login"); // 'login' or 'signup'
     const [loginType, setLoginType] = useState("supporter"); // 'supporter' or 'creator'
 
     useEffect(() => {
         if (status === "authenticated") {
             router.push("/dashboard");
-            console.log("User is logged in:", currSession);
-        } else {
-            console.log("User is not logged in");
         }
-        console.log("auth mode: ", authMode, searchParams);
 
         // if (searchParams.get('signup') === 'true') {
         //     setAuthMode('signup');
@@ -95,7 +91,7 @@ const AuthPage = () => {
         // else {
         //     router.push('/login');
         // }
-    }, [authMode]);
+    }, []);
 
 
     const handleSubmit = async (e) => {

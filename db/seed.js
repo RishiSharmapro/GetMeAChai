@@ -155,7 +155,7 @@ const campaigns = [
 
 async function seedDatabase() {
     try {
-        const conn = await mongoose.connect('mongodb+srv://project-chai:chai1234@cluster0.g39ao.mongodb.net/chai');
+        const conn = await mongoose.connect('your_mongo_connection_string');
         console.log(`MongoDB Connected: ${conn.connection.host}`);
         console.log("Connected to MongoDB");
     

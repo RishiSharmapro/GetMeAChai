@@ -87,15 +87,33 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-white shadow-lg absolute top-20 left-0 w-full">
           <nav className="flex flex-col p-4 space-y-4">
-            <Link href="#" className="text-gray-700 hover:text-amber-500">Discover</Link>
-            <Link href="#" className="text-gray-700 hover:text-amber-500">Start a Campaign</Link>
-            <Link href="#" className="text-gray-700 hover:text-amber-500">About</Link>
-            <div className="border-t pt-4 flex items-center space-x-4">
-              <button className="w-9 h-9 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300">
+            <Link href="/creators" className="cursor-pointer text-gray-700 hover:text-amber-500">Discover</Link>
+            <Link href="/login" className="cursor-pointer text-gray-700 hover:text-amber-500">Start a Campaign</Link>
+            <Link href="/about" className="cursor-pointer text-gray-700 hover:text-amber-500">About</Link>
+            {(status === "authenticated") && (
+              // <Link href={'/dashboard'} >
+                <div className="flex justify-center items-center text-amber-500  font-bold py-2 px-2 rounded-md hover:text-amber-600 transition-colors text-sm">
+                  {/* <User size={20} className="text-gray-600 bg-white border rounded-full" /> */}
+                  <Image src={session.user.image} height={30} width={30} alt={session.user.name} className="rounded-full" />
+                  <button onClick={() => setShowDropdown(!showDropdown)} className='cursor-pointer ml-2 flex items-center py-1'>
+                    {session.user.name} {renderArrow()}
+                  </button>
+                  {showDropdown && (
+                    <div onMouseLeave={() => setShowDropdown(false)} className="absolute left-30 top-45 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-2">
+                      <Link href="/dashboard" className="w-full text-center block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Dashboard</Link>
+                      <button onClick={() => signOut()} className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign Out</button>
+                    </div>
+                  )}
+                  {/* <span className="ml-2">My Dashboard</span> */}
+                </div>
+              )}
+            {/* <div className="border-t pt-4 flex items-center space-x-4"> */}
+              {/* <button className="w-9 h-9 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300">
                 <User size={20} className="text-gray-600" />
-              </button>
-              <span className="text-gray-700">My Profile</span>
-            </div>
+              </button> */}
+
+              {/* <span className="text-gray-700">My Profile</span> */}
+            {/* </div> */}
           </nav>
         </div>
       )}

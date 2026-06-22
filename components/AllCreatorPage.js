@@ -1,102 +1,17 @@
 import { useState, useEffect } from "react";
 import { Search, ChevronDown } from "lucide-react";
 import CreatorCard from "@/components/CreatorCard";
-import { getAllUsers } from "@/actions/useractions";
-
-const allCreators = [
-  {
-    id: 1,
-    name: "Iron Man",
-    username: "ironman",
-    email: "ironman@avengers.com",
-    razorpayid: "rzp_test_v54yD3C4TLhlSO",
-    razorpaysecret: "mzeOkhc26e5YJQ912iuqmYUk",
-    avatar: "iron_man_pp.jpeg",
-    coverImage: "iron_man.png",
-    bio: "Genius, billionaire, playboy, philanthropist. Also builds world-saving tech in his spare time.",
-    supporters: 3420,
-    projects: 5,
-    category: "Tech",
-  },
-  {
-    id: 2,
-    name: "Po from Kung Fu Panda",
-    username: "kungfupanda",
-    email: "po@kungfupanda.com",
-    razorpayid: "rzp_test_v54yD3C4TLhlSO",
-    razorpaysecret: "mzeOkhc26e5YJQ912iuqmYUk",
-    avatar: "poo_pp.jpeg",
-    coverImage: "poo.png",
-    bio: "Kung Fu Master. Dumpling enthusiast. Teacher of inner peace and high kicks.",
-    supporters: 1750,
-    projects: 2,
-    category: "Martial Arts",
-  },
-  {
-    id: 3,
-    name: "Captain America",
-    username: "captainamerica",
-    email: "captain@avengers.com",
-    razorpayid: "rzp_test_v54yD3C4TLhlSO",
-    razorpaysecret: "mzeOkhc26e5YJQ912iuqmYUk",
-    avatar: "captain_pp.jpeg",
-    coverImage: "captain.png",
-    bio: "Leader, soldier, and symbol of freedom. Always ready to rally the troops.",
-    supporters: 2980,
-    projects: 3,
-    category: "Action",
-  },
-  {
-    id: 4,
-    name: "Daredevil",
-    username: "daredevil",
-    email: "daredevil@murdock.com",
-    razorpayid: "rzp_test_v54yD3C4TLhlSO",
-    razorpaysecret: "mzeOkhc26e5YJQ912iuqmYUk",
-    avatar: "daredevil_pp.jpeg",
-    coverImage: "daredevil.png",
-    bio: "Lawyer by day, vigilante by night. Protecting Hell’s Kitchen with justice and acrobatics.",
-    supporters: 1640,
-    projects: 1,
-    category: "Justice",
-  },
-  {
-    id: 5,
-    name: "The Author’s Minions",
-    avatar: "minions_pp.jpeg",
-    username: "minions",
-    email: "minions@despicableme.com",
-    razorpayid: "rzp_test_v54yD3C4TLhlSO",
-    razorpaysecret: "mzeOkhc26e5YJQ912iuqmYUk",
-    coverImage: "minions.png",
-    bio: "Small, yellow, chaotic. Specializing in bananas, mischief, and helping creators succeed.",
-    supporters: 920,
-    projects: 1,
-    category: "Comedy",
-  },
-  {
-    id: 6,
-    name: "Deadpool",
-    avatar: "deadpool_pp.jpeg",
-    username: "deadpool",
-    email: "deadpool@marvel.com",
-    razorpayid: "rzp_test_v54yD3C4TLhlSO",
-    razorpaysecret: "mzeOkhc26e5YJQ912iuqmYUk",
-    coverImage: "deadpool.png",
-    bio: "Merc with a Mouth. Breaking the fourth wall while breaking records.",
-    supporters: 2100,
-    projects: 2,
-    category: "Comedy",
-  },
-];
+import { getAllCreators } from "@/actions/useractions";
 
 const AllCreatorsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [creators, setCreators] = useState([]);
   const [filteredCreators, setFilteredCreators] = useState([]);
 
   useEffect(() => {
     const fetchCreators = async () => {
-      const creators = await getAllUsers();
+      const creators = await getAllCreators();
+      setCreators(creators);
       setFilteredCreators(creators);
     };
 
@@ -104,7 +19,7 @@ const AllCreatorsPage = () => {
   }, []);
 
   useEffect(() => {
-    const results = filteredCreators.filter(
+    const results = creators.filter(
       (creator) =>
         creator.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         creator.category.toLowerCase().includes(searchTerm.toLowerCase()) ||

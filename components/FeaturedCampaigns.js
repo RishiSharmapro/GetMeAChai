@@ -1,5 +1,5 @@
-import CampaignCard from '@/components/CampaignCard';
 import Link from 'next/link';
+import CampaignCard from '@/components/CampaignCard';
 
 const campaigns = [
   {

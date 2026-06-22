@@ -1,9 +1,8 @@
-import { NextResponse } from "next/server";
-import { validatePaymentVerification } from "razorpay/dist/utils/razorpay-utils";
-import Razorpay from "razorpay";
+import User from "@/models/User";
 import Payment from "@/models/Payment";
 import { connectDB } from "@/db/connect";
-import User from "@/models/User";
+import { NextResponse } from "next/server";
+import { validatePaymentVerification } from "razorpay/dist/utils/razorpay-utils";
 
 export const POST = async (req) => {
     await connectDB();
@@ -18,14 +17,13 @@ export const POST = async (req) => {
     }
 
     // getting the razorpay secret of the user
-    const user = await User.findOne({ username: checkOrderId.to_user });
+    const user = await User.findOne({ username: checkOrderId.to_user }).lean();
     const secret = user.razorpaysecret;
 
     // Verify the payment
     const verifier = validatePaymentVerification({"order_id": body.razorpay_order_id, "payment_id": body.razorpay_payment_id}, body.razorpay_signature, secret);
 
     if (!verifier) {
-        return NextResponse.error("Payment verification failed");
         return NextResponse.json({success: false ,message: "Payment verification failed" });
     }
 

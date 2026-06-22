@@ -5,14 +5,18 @@ import User from "@/models/User";
 import Campaign from "@/models/Campaign";
 import { connectDB } from "@/db/connect";
 import { signIn, signOut, auth } from "@/auth";
-// import { useRouter } from "next/navigation";
 
 
 export const createOrder = async (amount, to_user, paymentform) => {
     await connectDB();
+    const session = await auth();
+    if (!session) {
+        return { error: "User not authenticated" };
+    }
+    paymentform.from_user = session.user.email;
 
     // fetch the user details to get the razorpay secret
-    const user = await User.findOne({ username: to_user });
+    const user = await User.findOne({ username: to_user }).lean();
     const userId = user.razorpayid;
     const secret = user.razorpaysecret;
 
@@ -28,6 +32,7 @@ export const createOrder = async (amount, to_user, paymentform) => {
     //create a payment instance which shows pending payment in the database
     await Payment.create({
         name: paymentform.name,
+        from_user: paymentform.from_user,
         to_user: to_user,
         order_id: order.id,
         amount: amount,
@@ -43,12 +48,7 @@ export const getUserSupporters = async (username) => {
     let payments = await Payment.find({ to_user: username, status: "success" }).sort({ amount: -1 }).lean();
     payments.sort((a, b) => b.amount - a.amount);
 
-    const plainPayments = payments.map(payment => ({ ...payment, _id: 'not available' }));
-    // const plainPayments = payments._doc;
-    // let payemntList = data.toObject({fllatenObjectsId: true});
-    // const user = await User.findOne({username: params.username});
-    // return data;
-    return plainPayments;
+    return payments.map(({ _id, ...payment }) => payment);
 }
 
 export const fetchUser = async (username) => {
@@ -85,15 +85,8 @@ export const updateProfile = async (data) => {
             return { message: "User ID is required" };
         }
 
-        // Disallow email update
-        // if (data.email) {
-        //     return { message: "Email cannot be changed" };
-        // }
-
-        // Create a clean copy of data excluding protected fields
         const { _id, email, ...fieldsToUpdate } = data;
 
-        // If no fields to update, return
         if (Object.keys(fieldsToUpdate).length === 0) {
             return { message: "No fields to update" };
         }
@@ -102,7 +95,7 @@ export const updateProfile = async (data) => {
             userId,
             fieldsToUpdate,
             { new: true }
-        );
+        ).lean();
 
         if (!updatedUser) {
             return { message: "User not found" };
@@ -124,12 +117,17 @@ export const updateProfile = async (data) => {
 
 export const getUser = async (username) => {
     await connectDB();
-    const user = await User.findOne({ username: username });
+    const user = await User.findOne({ username: username }).lean();
     if (!user) {
         return null;
     }
 
-    return JSON.stringify(user);
+    user._id = (user._id).toString();
+    delete user.razorpayid;
+    delete user.razorpaysecret;
+    delete user.password;
+    delete user.__v;
+    return user;
 }
 export const getAllUsers = async () => {
     await connectDB();
@@ -141,6 +139,24 @@ export const getAllUsers = async () => {
     });
     return Array.isArray(users) ? users : [users];
 }
+
+export const getAllCreators = async () => {
+    await connectDB();
+    const creators = await User.find({ creator: true }).lean();
+    creators.forEach(creator => {
+        creator._id = (creator._id).toString();
+        delete creator.razorpayid;
+        delete creator.razorpaysecret;
+    });
+    
+    return creators;
+};
+
+export const getAllContributions = async (userEmail) => {
+    await connectDB();
+    const contributions = await Payment.find({ status: "success", from_user: userEmail }).lean();
+    return contributions.map(({ _id, ...contribution }) => contribution);
+};
 
 export const handleGithubSignIn = async () => {
     await signIn('github', {

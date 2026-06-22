@@ -1,14 +1,5 @@
 import React from 'react'
 
-// const Footer = () => {
-//   const currentYear = new Date().getFullYear()
-
-//   return (
-//     <footer className='bg-blue-950 flex justify-center items-center p-4 text-white'>
-//         <p className='text-center'>Copyright &copy; {currentYear} Get Me A Chai - All rights reserved!</p>
-//     </footer>
-//   )
-// }
 const Footer = () => (
   <footer className="bg-gray-900 text-gray-300">
     <div className="container mx-auto px-4 py-6">

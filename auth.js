@@ -1,65 +1,17 @@
 import NextAuth from "next-auth"
+import User from "@/models/User"
+import { connectDB } from "@/db/connect"
 import Github from "next-auth/providers/github"
 import Google from "next-auth/providers/google"
-import Credentials from "next-auth/providers/credentials"
-import { ZodError } from "zod"
-import { signInSchema } from "@/models/SignIn"
-import { connectDB } from "@/db/connect"
-import User from "@/models/User"
- 
-export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [Github, Google,
-    Credentials({
-      credentials: {
-        email: {
-          type: "email",
-          label: "Email",
-          placeholder: "johndoe@gmail.com",
-        },
-        password: {
-          type: "password",
-          label: "Password",
-          placeholder: "*****",
-        },
-      },
-      authorize: async (credentials) => {
 
-        try {
-          let user = null
- 
-          const { email, password } = await signInSchema.parseAsync(credentials)
-          // logic to salt and hash password
-          // const pwHash = saltAndHashPassword(password)
- 
-          // logic to verify if the user exists
-          // user = await getUserFromDb(email, password)
- 
-          // if (!user) {
-          //   throw new Error("Invalid credentials.")
-          // }
- 
-          // return JSON object with the user data
-          // return user
-          return { email, password } // Replace with actual user data from your database
-        } catch (error) {
-          if (error instanceof ZodError) {
-            console.error("Zod validation failed", error.flatten());
-            return null;
-          } else {
-            console.error("Unexpected error in authorize():", error);
-            throw error;
-          }
-        }
-      },
-    })
-  ],
+export const { handlers, signIn, signOut, auth } = NextAuth({
+  providers: [Github, Google],
   callbacks: {
     async signIn({ user }) {
       await connectDB();
+      const dbUser = await User.findOne({ email: user.email }).lean();
 
-      const existingUser = await User.findOne({ email: user.email });
-
-      if (!existingUser) {
+      if (!dbUser) {
         const username = user.email.split("@")[0];
 
         await User.create({
@@ -73,16 +25,43 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return true;
     },
-    async session({ session }) {
-      await connectDB();
+    async jwt({ token, user, trigger }) {
 
-      const dbUser = await User.findOne({ email: session.user.email });
+      if (trigger === "update") {
+        await connectDB();
 
-      if (dbUser) {
-        session.user.id = dbUser._id.toString();
-        session.user.username = dbUser.username;
-        session.user.image = dbUser.avatar;
+        const dbUser = await User.findOne({ email: token.email }).lean();
+        if (dbUser) {
+          token.id = dbUser._id.toString();
+          token.username = dbUser.username;
+          token.avatar = dbUser.avatar;
+          token.name = dbUser.name;
+        }
+
+        return token;
       }
+
+      if (user) {
+        await connectDB();
+        
+        const dbUser = await User.findOne({
+          email: token.email,
+        }).lean();
+        
+        if (dbUser) {
+          token.id = dbUser._id.toString();
+          token.username = dbUser.username;
+          token.avatar = dbUser.avatar;
+        }
+      }
+
+      return token;
+    },
+
+    async session({ session, token }) {
+      session.user.id = token.id;
+      session.user.username = token.username;
+      session.user.image = token.avatar;
 
       return session;
     },

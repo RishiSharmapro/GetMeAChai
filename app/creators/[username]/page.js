@@ -1,8 +1,5 @@
 import React from 'react'
-import User from '@/models/User'
 import CreatorPage from '@/components/CreatorPage'
-
-
 
 export async function generateMetadata({ params }) {
   const { username }  = await params;
@@ -18,7 +15,6 @@ const page = async ({ params }) => {
 
   return (
     <>
-        {/* <PaymentPage params={params}/> */}
         <CreatorPage username={username} />
     </>
   )

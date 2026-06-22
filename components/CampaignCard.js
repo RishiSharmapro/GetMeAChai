@@ -1,6 +1,6 @@
-import ProgressBar from '@/components/ProgressBar';
-import Image from 'next/image';
 import Link from 'next/link';
+import Image from 'next/image';
+import ProgressBar from '@/components/ProgressBar';
 
 const CampaignCard = ({ campaign }) => {
   const progress = (campaign.raised / campaign.goal) * 100;  

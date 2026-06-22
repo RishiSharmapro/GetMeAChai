@@ -1,11 +1,8 @@
 'use client';
+import Script from "next/script";
 import { useState } from "react";
 import { Shield, X } from 'lucide-react';
 import { createOrder } from "@/actions/useractions";
-// import { toast, Flip } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
-import { useSearchParams, useRouter } from "next/navigation";
-import Script from "next/script";
 
 
 const PaymentModal = ({ isOpen, onClose, creatorUsername }) => {
@@ -13,10 +10,20 @@ const PaymentModal = ({ isOpen, onClose, creatorUsername }) => {
     const [paymentform, setPaymentform] = useState({ name: "", message: "" });
     const presetAmounts = [50, 100, 200, 500, 1000];
 
-
     // Placeholder for Razorpay integration
     const handlePayment = async () => {
         pay(amount);
+        onClose();
+    };
+
+    const handleClose = () => {
+        setAmount(10);
+
+        setPaymentform({
+            name: "",
+            message: "",
+        });
+
         onClose();
     };
 
@@ -51,7 +58,7 @@ const PaymentModal = ({ isOpen, onClose, creatorUsername }) => {
             "callback_url": `${process.env.NEXT_PUBLIC_URL}/api/razorpay`,
             "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
                 "name": paymentform.name, //your customer's name
-                "email": 'xyz@zyx.com',
+                // "email": session.user.email,
                 "contact": `+917089632368` //Provide the customer's phone number for better conversion rates 
             },
             "notes": {
@@ -73,12 +80,12 @@ const PaymentModal = ({ isOpen, onClose, creatorUsername }) => {
             <Script
                 src="https://checkout.razorpay.com/v1/checkout.js"
             />
-            <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
+            <div className="fixed inset-0 bg-black/50 bg-opacity-50 z-50 flex justify-center items-center p-4">
                 <div className="bg-white rounded-xl shadow-2xl w-full max-w-md transform transition-all" onClick={(e) => e.stopPropagation()}>
                     <div className="p-6">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-xl font-bold text-gray-800">Support {creatorUsername}</h2>
-                            <button onClick={onClose} className="text-gray-400 hover:text-gray-600"><X size={24} /></button>
+                            <button onClick={handleClose} className="text-gray-400 hover:text-gray-600"><X size={24} /></button>
                         </div>
                         <p className="text-gray-600 mb-6">Your contribution helps creators continue their passion. Thank you!</p>
 
@@ -97,8 +104,8 @@ const PaymentModal = ({ isOpen, onClose, creatorUsername }) => {
                                 <span className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500">INR</span>
                             </div>
                             <div className="relative">
-                                <input type="text" placeholder="Your Name" onChange={(e) => setPaymentform({ ...paymentform, name: e.target.value })} className="w-full pl-7 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500 mb-2" />
-                                <input type="text" placeholder="Add a message" onChange={(e) => setPaymentform({ ...paymentform, message: e.target.value })} className="w-full pl-7 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500" />
+                                <input type="text" placeholder="Your Name" onChange={(e) => setPaymentform({ ...paymentform, name: e.target.value })} value={paymentform.name} className="w-full pl-7 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500 mb-2" />
+                                <input type="text" value={paymentform.message} onChange={(e) => setPaymentform({ ...paymentform, message: e.target.value })} placeholder="Add a message" className="w-full pl-7 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500" />
                             </div>
                         </div>
                         <button onClick={handlePayment} className="w-full bg-amber-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-amber-600 transition-colors flex items-center justify-center space-x-2">

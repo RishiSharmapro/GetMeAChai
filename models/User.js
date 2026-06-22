@@ -10,12 +10,13 @@ const userSchema = new Schema({
   password: { type: String },
   username: { type: String, unique: true, required: true },
   bio: { type: String, default: "No bio available" },
+  creator: { type: Boolean, default: false },
   supporters: { type: Number, default: 0 },
   projects: { type: Number, default: 0 },
   category: { type: String, default: "General" },
   coverpicture: { type: String },
-  razorpayid: { type: String, default: "rzp_test_v54yD3C4TLhlSO" },
-  razorpaysecret: { type: String, default: "mzeOkhc26e5YJQ912iuqmYUk" }
+  razorpayid: { type: String },
+  razorpaysecret: { type: String }
 }, {
   timestamps: true
 });
